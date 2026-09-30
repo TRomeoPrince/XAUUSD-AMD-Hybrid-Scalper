@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Build
+build/
+cmake-build-*/
+*.so
+*.pyd
+*.dll
+*.dylib
+
+# Models / data
+data/
+models/
+*.joblib
+*.pkl
+
+# MT5 generated / local
+*.ex5
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
