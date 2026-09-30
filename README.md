@@ -1,70 +1,47 @@
 # XAUUSD AMD Hybrid Scalper
 
-Hybrid research and execution architecture for an XAUUSD scalping system.
+Hybrid M15/M5 XAUUSD scalping research and execution system.
 
 ## Architecture
 
-- **Python**: historical data ingestion, research, backtesting, feature engineering, analytics, and future ML experiments.
-- **C++**: real-time M15/M5 strategy engine, market-structure calculations, AMD state machine, indicators, signal generation, and diagnostic logging.
-- **MT5 / MQL5**: broker integration, live symbol handling, 1% risk sizing, execution, SL/TP, session/news/spread protection, and position management.
+- **Python** — historical ingestion, research, backtests, analytics and future ML experiments.
+- **C++** — deterministic real-time strategy engine and diagnostics.
+- **MT5/MQL5** — broker integration, risk/execution and safety controls.
 
-## Current Strategy Identity
+## Strategy identity
 
-The system is designed around **M15 context + M5 execution**.
+**M15 = context / AMD.** Market structure, accumulation, liquidity, manipulation and distribution narrative.
 
-### M15
-- Market structure
-- Supply/demand and important support/resistance areas
-- Accumulation/range detection
-- Liquidity around the range
-- Manipulation / liquidity sweep
-- Expected distribution direction
+**M5 = execution.** BOS/MSS, displacement, FVG/OB/structural retests and price-action confirmation.
 
-### M5
-- Liquidity refinement
-- BOS / CHoCH / MSS confirmation
-- Momentum / displacement
-- FVG / order-block / structural retests where appropriate
-- Candlestick confirmation
-- Entry execution
+RSI and MACD remain secondary confirmation tools; they do not create trades independently.
 
-Indicators are secondary:
-- **RSI**: mainly reversal confirmation
-- **MACD**: mainly continuation / momentum confirmation
+## Current version — v0.2.0
 
-AMD and price action remain the primary decision framework.
+Implemented:
+- fixed-size tick and M15 bar processing
+- configurable M15 accumulation detector
+- range high/low/midpoint/width metadata
+- one-sided liquidity-sweep/manipulation detector
+- provisional expected distribution direction
+- explicit AMD states
+- smoke test for range → low sweep → bullish expectation
+- documentation of detector assumptions
 
-## Version
+Not implemented yet:
+- M5 BOS/MSS/displacement confirmation
+- FVG/OB/retest entry families
+- live trade signals
+- 1% broker-aware execution
+- news/session/spread protection
+- ML decision filter
 
-Current foundation: **v0.1.0**
+## Research warning
 
-This version establishes:
-- project layout
-- shared market-data types
-- fixed-size C++ tick buffer
-- initial market-structure scaffolding
-- diagnostic event logging
-- Python package skeleton
-- MT5 bridge skeleton
+The v0.2 accumulation thresholds are configurable starting hypotheses. They must be validated against historical XAUUSD examples and the intended visual definition before being promoted to production strategy rules.
 
-No live auto-trading is enabled in v0.1.0.
+## Planned risk
 
-## Planned Development
+Production target remains 1% equity risk per trade with broker-aware dynamic sizing and XAUUSD/XAUUSDm/XAUUSDc compatibility.
 
-1. v0.1.x — hybrid infrastructure and diagnostics
-2. v0.2.0 — M15 accumulation + AMD state machine
-3. v0.3.0 — M5 BOS/MSS/displacement + entry families
-4. v0.4.0 — execution/risk/session/news protections
-5. v0.5.0 — historical analytics and strategy comparison
-6. Later — optional ML confidence/filter layer after deterministic edge is validated
-
-## Risk
-
-Planned production risk:
-- 1% of account equity per trade
-- dynamic lot sizing from actual SL and broker contract specifications
-- support for XAUUSD symbol variants such as XAUUSD, XAUUSDm, and XAUUSDc
-
-## Status
-
-Research / development only. Do not use on a live account until the strategy has been validated through historical, walk-forward, and forward-demo testing.
+Do not use this repository for live trading until historical, walk-forward and forward-demo validation is complete.
