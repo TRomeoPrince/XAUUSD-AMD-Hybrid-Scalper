@@ -4,44 +4,48 @@ Hybrid M15/M5 XAUUSD scalping research and execution system.
 
 ## Architecture
 
-- **Python** — historical ingestion, research, backtests, analytics and future ML experiments.
-- **C++** — deterministic real-time strategy engine and diagnostics.
-- **MT5/MQL5** — broker integration, risk/execution and safety controls.
+- **Python** — historical ingestion, backtests, analytics and future ML research.
+- **C++** — deterministic AMD, market-structure and setup engine.
+- **MT5/MQL5** — future broker integration, risk/execution and safety controls.
 
-## Strategy identity
+## Strategy
 
-**M15 = context / AMD.** Market structure, accumulation, liquidity, manipulation and distribution narrative.
+**M15:** accumulation → liquidity/manipulation → expected distribution direction.
 
-**M5 = execution.** BOS/MSS, displacement, FVG/OB/structural retests and price-action confirmation.
+**M5:** confirmed swing structure → body-close BOS/MSS evidence → displacement → protected swing → retest → setup candidate.
 
-RSI and MACD remain secondary confirmation tools; they do not create trades independently.
+Indicators remain secondary confirmations. AMD and price action remain primary.
 
-## Current version — v0.2.0
+## Current version — v0.3.0
 
 Implemented:
-- fixed-size tick and M15 bar processing
 - configurable M15 accumulation detector
-- range high/low/midpoint/width metadata
-- one-sided liquidity-sweep/manipulation detector
-- provisional expected distribution direction
-- explicit AMD states
-- smoke test for range → low sweep → bullish expectation
-- documentation of detector assumptions
+- M15 one-sided liquidity sweep/manipulation
+- expected distribution direction
+- M5 confirmed swing detection
+- body-close structure break
+- ATR/body-ratio displacement confirmation
+- protected swing capture
+- AMD structural-retest candidate
+- exact `ENTRY_TRIGGER=AMD_STRUCTURE_RETEST`
+- explicit setup rejection reasons
+- smoke tests for AMD and M5 confirmation
+- TradingEngine integration across M15 → M5
 
-Not implemented yet:
-- M5 BOS/MSS/displacement confirmation
-- FVG/OB/retest entry families
-- live trade signals
-- 1% broker-aware execution
-- news/session/spread protection
-- ML decision filter
+### Safety lock
 
-## Research warning
+v0.3.0 **does not send trades**. Even a valid setup candidate leaves `Signal::trigger_trade=false`. Broker execution is intentionally deferred until setup detection has been replayed and validated.
 
-The v0.2 accumulation thresholds are configurable starting hypotheses. They must be validated against historical XAUUSD examples and the intended visual definition before being promoted to production strategy rules.
+## Next
 
-## Planned risk
+v0.3.x / v0.4 work:
+- FVG detection and retest
+- order-block/rejection entry families
+- refined BOS vs CHoCH/MSS classification
+- setup expiry and POI-distance rules
+- diagnostic log serialization for Python analysis
+- session/news/spread filters
+- broker-aware 1% risk engine
+- MT5 ↔ C++ live bridge
 
-Production target remains 1% equity risk per trade with broker-aware dynamic sizing and XAUUSD/XAUUSDm/XAUUSDc compatibility.
-
-Do not use this repository for live trading until historical, walk-forward and forward-demo validation is complete.
+The current numerical thresholds are research defaults and must be tuned using historical XAUUSD data rather than treated as final strategy truth.
